@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Initialize Google Generative AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Example WEEK_PLAN structure for the AI to follow
 const WEEK_PLAN_EXAMPLE = {
