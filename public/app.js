@@ -769,7 +769,7 @@ window.generateAIPlan = async function() {
   btnTxt.textContent = "Asking Gemini...";
   
   try {
-    const response = await fetch('http://localhost:3000/api/generate-plan', {
+    const response = await fetch('https://athlete-blueprint.onrender.com/api/generate-plan', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ height, weight, goals })
