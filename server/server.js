@@ -91,8 +91,13 @@ ${JSON.stringify(WEEK_PLAN_EXAMPLE, null, 2)}
 Ensure all keys (day1, day2, focus, exercises, name, sets, reps, duration, intensity, distance, notes) are present and correctly typed for each day's plan. Provide specific exercises and appropriate sets/reps/duration based on the user's goals. If a field is not applicable for a specific exercise, you can omit it or use null, but the overall structure for the day must remain.`
 
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+let rawText = result.response.text();
+
+// THE FIX: Strip out the markdown formatting
+rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+
+const planData = JSON.parse(rawText);
+res.json(planData);
 
     // Attempt to parse the text as JSON. The model is instructed to return JSON.
     let workoutPlan;
