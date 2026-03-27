@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Athlete Blueprint</title>
+
+
+</head>
+<body>
+
+<!-- PAGES -->
+<div class="page active" id="page-today"></div>
+<div class="page" id="page-week"></div>
+<div class="page" id="page-diet"></div>
+<div class="page" id="page-science"></div>
+<div class="page" id="page-stats"></div>
+
+<div class="page" id="page-ai">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div>
+        <div class="hdr-label">Elite Coach</div>
+        <div class="hdr-title">Gemini AI</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding: 20px;">
+    <div class="sci-card" style="margin-bottom: 20px;">
+      <div class="sci-card-title">Generate Dynamic Regimen</div>
+      <div class="sci-card-body">Enter your details and let Gemini generate a custom 7-day plan.</div>
+    </div>
+    <div class="action-row" style="padding:0;">
+      <input type="text" id="ai-height" placeholder="Height (e.g. 6'4&quot;)" style="width:100%; padding:14px; margin-bottom:10px; border-radius:10px; background:var(--bg3); border:1px solid var(--border); color:var(--text);">
+      <input type="text" id="ai-weight" placeholder="Weight (e.g. 79kg)" style="width:100%; padding:14px; margin-bottom:10px; border-radius:10px; background:var(--bg3); border:1px solid var(--border); color:var(--text);">
+      <textarea id="ai-goals" placeholder="Goals (e.g. Add swimming to my calisthenics routine)" style="width:100%; padding:14px; margin-bottom:15px; border-radius:10px; background:var(--bg3); border:1px solid var(--border); color:var(--text); min-height:80px;"></textarea>
+      <div class="action-btn" onclick="generateAIPlan()" style="justify-content:center; background:var(--accent); color:#000;">
+        <div class="action-btn-title" id="ai-btn-text" style="color:#000; font-weight:bold;">Generate My Plan</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- TAB BAR -->
+<nav class="tab-bar" id="tabBar">
+  <div class="tab-btn active" data-tab="today" onclick="switchTab('today',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+    <span class="tab-lbl">TODAY</span>
+  </div>
+  <div class="tab-btn" data-tab="week" onclick="switchTab('week',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span class="tab-lbl">WEEK</span>
+  </div>
+  <div class="tab-btn" data-tab="diet" onclick="switchTab('diet',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a9 9 0 1 0 9 9"/><path d="M12 6v6l3 3"/><path d="M18 2v4h4"/></svg>
+    <span class="tab-lbl">DIET</span>
+  </div>
+  <div class="tab-btn" data-tab="science" onclick="switchTab('science',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
+    <span class="tab-lbl">SCIENCE</span>
+  </div>
+  <div class="tab-btn" data-tab="stats" onclick="switchTab('stats',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span class="tab-lbl">PROFILE</span>
+  </div>
+  
+  <div class="tab-btn" data-tab="ai" onclick="switchTab('ai',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a2 2 0 0 1 2 2v1h2a2 2 0 0 1 2 2v2h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1v2a2 2 0 0 1-2 2h-2v1a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-1H8a2 2 0 0 1-2-2v-2H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h1V7a2 2 0 0 1 2-2h2V4a2 2 0 0 1 2-2z"/></svg>
+    <span class="tab-lbl">AI COACH</span>
+  </div>
+  </nav>
+
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-sheet">
+    <div class="modal-title">Reset Today?</div>
+    <div class="modal-sub">All completed tasks for today will be unchecked. Your streak will reset if today had progress.</div>
+    <div class="modal-btns">
+      <div class="modal-cancel" onclick="closeModal()">Cancel</div>
+      <div class="modal-confirm" onclick="confirmReset()">Reset</div>
+    </div>
+  </div>
+</div>
+
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
